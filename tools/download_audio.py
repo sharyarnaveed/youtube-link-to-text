@@ -1,9 +1,21 @@
 import yt_dlp
+import re
 
-def download_audio(url, output_path="audio.mp3"):
+def extract_video_id(url):
+ 
+    match = re.search(r"(?:v=|youtu\.be/)([A-Za-z0-9_-]{11})", url)
+    return match.group(1) if match else "audio"
+
+
+
+def download_audio(url):
+    print(url)
+    video_id = extract_video_id(url)
+    print(video_id)
+    output_path = f"audio_{video_id}.mp3"
     ydl_opts = {
         'format': 'bestaudio/best',
-        'outtmpl': "audio",
+        'outtmpl': f"audio_{video_id}.%(ext)s",
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
